@@ -1,0 +1,8 @@
+train: E:/Rueben/trainData.txt
+val: E:/Rueben/valData.txt
+
+# number of classes
+nc: 1
+
+# class names
+names: [ 'sugarbeet' ]

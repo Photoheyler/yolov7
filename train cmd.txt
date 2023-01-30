@@ -1,0 +1,28 @@
+(yolov7) C:/Users/Photoheyler/Desktop/YoloV7Custom/yolov7-custom>train.py --workers 1 --device 0 --batch-size 8 --epochs 5 --img640 640 --data data/custom_data-yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-custom.yaml --name yolov7-custom --weights yolov7.pt
+
+
+python train.py --workers 1 --device 0 --batch-size 8 --epochs 100 --img 640 640 --data data/custom_data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7x-custom.yaml --name yolov7-custom --weights yolov7.pt
+
+
+train 1280x1280
+python train_aux.py --workers 1 --device 0 --batch-size 8 --epochs 100 --img 1280 1280 --data data/custom_data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-w6.yaml --name yolov7-custom_w6 --weights yolov7-w6.pt
+
+python train_aux.py --workers 1 --device 0 --batch-size 8 --epochs 100 --img 1280 1280 --data data/custom_data_beets_coco.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-w6.yaml --name yolov7-custom_w6 --weights yolov7-w6.pt
+
+#train 1280x1280 in coco dataset format
+python train_aux.py --workers 1 --device 0 --batch-size 6 --epochs 100 --img 1280 1280 --data data/custom_data_beets_coco.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-w6.yaml --name yolov7-custom_w6 --weights yolov7-w6.pt
+
+python detect.py --weights best.pt --conf 0.01 --img-size 640 --source 0000000244_604041395.bmp --view-img --no-trace
+
+python detect.py --weights runs/train/yolov7-custom12/weights/best.pt --conf 0.05 --img-size 640 --source data/train/images/000000.bmp --view-img --no-trace
+
+python export.py --weights runs/train/yolov7-custom4/weights/best.pt --grid --end2end --simplify --topk-all 100 --iou-thres 0.10 --conf-thres 0.05 --img-size 640 640 --max-wh 640
+
+python ./tensorrt-python/export.py -o yolov7-custom/runs/train/yolov7-custom4/weights/best.onnx -e best_640.trt -p fp16
+
+python trt.py -e yolov7-tiny-nms.trt  -i src/rueben.bmp -o rueben.jpg --end2end
+
+export for 1280 x1280
+python export_aux.py --weights runs/train/yolov7-custom_w63/weights/best.pt --grid --end2end --simplify --topk-all 100 --iou-thres 0.10 --conf-thres 0.05 --img-size 1280 1280 --max-wh 1280
+
+python ./tensorrt-python/export.py -o yolov7-custom/runs/train/yolov7-custom_w63/weights/best.onnx -e best_1280.trt -p fp16

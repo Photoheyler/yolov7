@@ -1,0 +1,8 @@
+train: ./data/street_train
+val: ./data/street_val
+
+# number of classes
+nc: 1
+
+# class names
+names: [ 'asphalt' ]
